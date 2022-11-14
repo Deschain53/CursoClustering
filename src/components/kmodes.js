@@ -61,7 +61,7 @@ export const Kmodes = () => {
                 job: transforma(dato.job,tipoDeTrabajo),    
                 marital: transforma(dato.marital, estadoCivil),
                 education: transforma(dato.education,educacion),
-                default: transforma(dato.default,deudor),
+                deudor: transforma(dato.default,deudor),
                 loan: transforma(dato.loan,prestamo),
                 contact: transforma(dato.contact,tipoContacto),
                 poutcome: transforma(dato.poutcome,resultadoAnterior),
@@ -106,7 +106,7 @@ export const Kmodes = () => {
 
 //2 - Calculando distancias a los centroides 
 
-    const atributos = ["age","job","marital", "education", "default", "loan", "contact", "poutcome",]
+    const atributos = ["age","job","marital", "education", "deudor", "loan", "contact", "poutcome",]
 
     //Función para obtener la distancia de un dato a un arreglo de centroides, devuelve un arreglo con las distancias
     const obtenDistanciaCentroides = (dato, centroides= [], atributos = []) => {
@@ -182,6 +182,7 @@ export const Kmodes = () => {
             let contabilidadAtributoI = 0;
             for (let j = 0; j < datos.length -2; j++) {
                 if(datos[j][atributo] == i){
+                    
                     contabilidadAtributoI++;
                 }
             }
@@ -212,33 +213,57 @@ export const Kmodes = () => {
 
     }
 
-    const encontrarNuevosCentroides = (datos = [], k = 2, atributos = []) => {
+    const encontrarNuevosCentroides = (datos = [], atributos = [], n = 2) => {
         let centroides = [];
         
-        for (let i = 0; i < k; i++) {
+        for (let i = 0; i < n; i++) {
             const elementosClusterI = datos.map( dato => { 
                 if(dato!== undefined)
-                if(dato.cluster === i){return dato}}
+                if(dato.cluster == 1){return dato}}
                 );
+            console.log(elementosClusterI)
             const centroideI = encontrarCentroide(elementosClusterI, atributos);
+            console.log(centroideI);
             centroides.push(centroideI)
         }
         return centroides;
     }
 
-   // console.log(encontrarNuevosCentroides(datosConClusterAsignado,k,atributos))
+   
 
     const arrayprueba = [datosConClusterAsignado[0],datosConClusterAsignado[1], datosConClusterAsignado[2]];
     console.log(arrayprueba)
-
-
 
     //console.log(encontrarNuevosCentroides(arrayprueba, k, atributos))
     console.log('******************')
     
     console.log('Num atrib ' + determinaNumeroDeAtributo('job',arrayprueba ))
-    console.log('centroide ' + encontrarCentroide(arrayprueba, atributos))
+    console.log( encontrarCentroide(arrayprueba, atributos))
+    console.log( encontrarCentroide(datosConClusterAsignado, atributos))
     
+    
+    ////Prueba 100
+    
+    console.log('******************')
+    
+    let variablePrueba100 = []
+
+    for (let i = 0; i < 100 ; i++) {
+        variablePrueba100.push(datosConClusterAsignado[i])
+    }
+
+    console.log(variablePrueba100)
+
+    console.log(encontrarCentroide(variablePrueba100, atributos))
+
+
+
+    //console.log(encontrarNuevosCentroides(arrayprueba, atributos))
+    //console.log(encontrarNuevosCentroides(arrayprueba, atributos, 2))
+
+    //console.log(encontrarNuevosCentroides(datosConClusterAsignado,k,atributos))
+
+
     //const nuevosCentroides = encontrarNuevosCentroides(datosConClusterAsignado, k, atributos)
     //console.log(nuevosCentroides)
     //console.log(cuentaAtributoEnDatos('marital',arrayprueba))
