@@ -53,7 +53,8 @@ export const Kmodes = () => {
 
 //0 - Convirtiendo a datos y verificando que no haya datos faltantes
     const datosProcesados = dataBank.map( dato => {
-        if(dato!== undefined & dato.age != null &dato.job != null &dato.marital != null & dato.education != null & dato.default != null & dato.loan != null & dato.contact != null & dato.poutcome != null ) {
+        if(dato!== undefined){
+        if(dato.age != null &dato.job != null &dato.marital != null & dato.education != null & dato.default != null & dato.loan != null & dato.contact != null & dato.poutcome != null ) {
             return {
                 //...dato,
                 age: decadaEdad(dato.age),
@@ -67,7 +68,7 @@ export const Kmodes = () => {
                 cluster:-1, 
                 distancias: [],
             }
-        }
+        }}
     })
 
     console.log(datosProcesados)
@@ -147,7 +148,10 @@ export const Kmodes = () => {
         return posicionValorMinimo;
     }
 
+
+
     const datosConClusterAsignado = datosConDistanciaCentroides.map( dato => { 
+        if(dato!= undefined)
         return {...dato, cluster: asignaACluster(dato.distancias)  }})
 
 
@@ -157,7 +161,10 @@ export const Kmodes = () => {
 
     //Determina la cantidad de valores diferentes que puede tomar un atributo numerico
     const determinaNumeroDeAtributo = (atributo = '', datos = []) => {
-        const atributoArray = datos.map( dato => {return dato[atributo]})
+        const atributoArray = datos.map( dato => {
+            if(dato!== undefined)
+            return dato[atributo]
+        })
 
         return Math.max.apply(null,atributoArray) +1 
     }
@@ -165,7 +172,7 @@ export const Kmodes = () => {
     //Funcion que cuenta el numero de cada variacion de atributo y regresa el resultado en arreglo 
     const cuentaAtributoEnDatos = (atributo = '', datos = []) => {
         const numeroAtributos = determinaNumeroDeAtributo(atributo, datos);
-        //console.log('Numero maximo ' + atributo +' : ' + numeroAtributos)
+        console.log('Numero maximo ' + atributo +' : ' + numeroAtributos)
         let atributosContabilizados = [];
 
         for (let i = 0; i < numeroAtributos; i++) {
@@ -192,14 +199,20 @@ export const Kmodes = () => {
             const valorMaximoEnAtributo = Math.max.apply(null,arrayContabilidaAtributos);
             Object.defineProperty(centroide,atributos[j],{value: arrayContabilidaAtributos.findIndex( valor => valor ===valorMaximoEnAtributo ) })
         }
+
+        console.log(centroide)
         return centroide;
+
     }
 
     const encontrarNuevosCentroides = (datos = [], k = 2, atributos = []) => {
         let centroides = [];
         
         for (let i = 0; i < k; i++) {
-            const elementosClusterI = datos.map( datos => { if(datos.cluster === i){return datos}});
+            const elementosClusterI = datos.map( dato => { 
+                if(dato!== undefined)
+                if(dato.cluster === i){return dato}}
+                );
             const centroideI = encontrarCentroide(elementosClusterI, atributos);
             centroides.push(centroideI)
         }
