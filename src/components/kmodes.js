@@ -71,7 +71,7 @@ export const Kmodes = () => {
         }}
     })
 
-    console.log(datosProcesados)
+    //console.log(datosProcesados)
 
 
 //1 - Eligiendo centroides aleatorios del conjunto de datos:
@@ -101,7 +101,7 @@ export const Kmodes = () => {
 
     const centroidesIniciales = eligeCentroideAleatorios(k, datosProcesados);
     
-    console.log(centroidesIniciales)
+   // console.log(centroidesIniciales)
 
 
 //2 - Calculando distancias a los centroides 
@@ -136,7 +136,7 @@ export const Kmodes = () => {
             return {...dato, distancias : obtenDistanciaCentroides(dato, centroidesIniciales,atributos )  }
         }})
 
-        console.log(datosConDistanciaCentroides);
+        //console.log(datosConDistanciaCentroides);
     
 
 //3 - Asignar grupo a cluster más cercano
@@ -166,18 +166,21 @@ export const Kmodes = () => {
             return dato[atributo]
         })
 
-        return Math.max.apply(null,atributoArray) +1 
+        //console.log(atributoArray)
+
+        return Math.max.apply(null,atributoArray) +1
     }
+
 
     //Funcion que cuenta el numero de cada variacion de atributo y regresa el resultado en arreglo 
     const cuentaAtributoEnDatos = (atributo = '', datos = []) => {
         const numeroAtributos = determinaNumeroDeAtributo(atributo, datos);
-        console.log('Numero maximo ' + atributo +' : ' + numeroAtributos)
+        //console.log('Numero maximo ' + atributo +' : ' + numeroAtributos)
         let atributosContabilizados = [];
 
         for (let i = 0; i < numeroAtributos; i++) {
             let contabilidadAtributoI = 0;
-            for (let j = 0; j < datos.length; j++) {
+            for (let j = 0; j < datos.length -2; j++) {
                 if(datos[j][atributo] == i){
                     contabilidadAtributoI++;
                 }
@@ -196,8 +199,12 @@ export const Kmodes = () => {
 
         for (let j = 0; j < atributos.length; j++) { 
             const arrayContabilidaAtributos = cuentaAtributoEnDatos(atributos[j],datos);
+            console.log(arrayContabilidaAtributos)
             const valorMaximoEnAtributo = Math.max.apply(null,arrayContabilidaAtributos);
-            Object.defineProperty(centroide,atributos[j],{value: arrayContabilidaAtributos.findIndex( valor => valor ===valorMaximoEnAtributo ) })
+            console.log('Valor maximo + ' + atributos[j]+ ' : '+valorMaximoEnAtributo)
+            const posValorMaximo = arrayContabilidaAtributos.findIndex( valor => valor ===valorMaximoEnAtributo);
+            console.log('posicion valor maximo' +  posValorMaximo)
+            Object.defineProperty(centroide,atributos[j],{value: posValorMaximo })
         }
 
         console.log(centroide)
@@ -219,7 +226,23 @@ export const Kmodes = () => {
         return centroides;
     }
 
-    console.log(encontrarNuevosCentroides(datosConClusterAsignado,k,atributos))
+   // console.log(encontrarNuevosCentroides(datosConClusterAsignado,k,atributos))
+
+    const arrayprueba = [datosConClusterAsignado[0],datosConClusterAsignado[1], datosConClusterAsignado[2]];
+    console.log(arrayprueba)
+
+
+
+    //console.log(encontrarNuevosCentroides(arrayprueba, k, atributos))
+    console.log('******************')
+    
+    console.log('Num atrib ' + determinaNumeroDeAtributo('job',arrayprueba ))
+    console.log('centroide ' + encontrarCentroide(arrayprueba, atributos))
+    
+    //const nuevosCentroides = encontrarNuevosCentroides(datosConClusterAsignado, k, atributos)
+    //console.log(nuevosCentroides)
+    //console.log(cuentaAtributoEnDatos('marital',arrayprueba))
+
 
 
     return (
